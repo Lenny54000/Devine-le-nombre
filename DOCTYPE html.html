@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Devinettes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            width: calc(100% - 22px);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result, #attempts-left, #range {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Jeu de Devinettes</h1>
+        <p>Je pense à un nombre entre 1 et 100.</p>
+        <input type="number" id="guess" placeholder="Entrez votre réponse">
+        <button onclick="checkGuess()">Devinez</button>
+        <p id="attempts-left">Tentatives restantes : 10</p>
+        <p id="range">Votre nombre est compris entre 1 et 100</p>
+        <p id="result"></p>
+    </div>
+    <script>
+        let nombreSecret = Math.floor(Math.random() * 100) + 1;
+        let essais = 0;
+        const maxEssais = 10;
+        let minRange = 1;
+        let maxRange = 100;
+
+        function checkGuess() {
+            const guessInput = document.getElementById('guess');
+            const result = document.getElementById('result');
+            const attemptsLeft = document.getElementById('attempts-left');
+            const range = document.getElementById('range');
+            const guess = Number(guessInput.value);
+
+            if (essais >= maxEssais) {
+                result.textContent = `Vous avez épuisé vos ${maxEssais} tentatives. Le nombre était ${nombreSecret}.`;
+                return;
+            }
+
+            essais++;
+            attemptsLeft.textContent = `Tentatives restantes : ${maxEssais - essais}`;
+
+            if (isNaN(guess)) {
+                result.textContent = "Veuillez entrer un nombre valide.";
+            } else if (guess < nombreSecret) {
+                result.textContent = "Trop petit ! Essayez encore.";
+                if (guess >= minRange) {
+                    minRange = guess + 1;
+                }
+            } else if (guess > nombreSecret) {
+                result.textContent = "Trop grand ! Essayez encore.";
+                if (guess <= maxRange) {
+                    maxRange = guess - 1;
+                }
+            } else {
+                result.textContent = `Bravo ! Vous avez trouvé le nombre en ${essais} essais.`;
+                return;
+            }
+
+            range.textContent = `Votre nombre est compris entre ${minRange} et ${maxRange}`;
+
+            if (essais === maxEssais && guess !== nombreSecret) {
+                result.textContent += ` Vous avez épuisé vos ${maxEssais} tentatives. Le nombre était ${nombreSecret}.`;
+            }
+        }
+    </script>
+</body>
+</html>
