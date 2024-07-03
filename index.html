@@ -54,7 +54,7 @@
     <div class="container">
         <h1>Jeu de Devinettes</h1>
         <p>Je pense à un nombre entre 1 et 100.</p>
-        <input type="number" id="guess" placeholder="Entrez votre réponse">
+        <input type="number" id="guess" placeholder="Entrez votre devinette">
         <button onclick="checkGuess()">Devinez</button>
         <p id="attempts-left">Tentatives restantes : 10</p>
         <p id="range">Votre nombre est compris entre 1 et 100</p>
@@ -79,6 +79,11 @@
                 return;
             }
 
+            if (guess < minRange || guess > maxRange) {
+                result.textContent = `Votre devinette doit être comprise entre ${minRange} et ${maxRange}.`;
+                return;
+            }
+
             essais++;
             attemptsLeft.textContent = `Tentatives restantes : ${maxEssais - essais}`;
 
@@ -99,6 +104,7 @@
                 return;
             }
 
+            // Mettre à jour la plage de valeurs affichée
             range.textContent = `Votre nombre est compris entre ${minRange} et ${maxRange}`;
 
             if (essais === maxEssais && guess !== nombreSecret) {
